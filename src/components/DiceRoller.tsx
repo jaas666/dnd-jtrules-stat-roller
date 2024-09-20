@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { rollStat, StatRollResult } from "../utils/DiceRoller";
-import "./DiceRoller.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./DiceRoller.css"; // Custom CSS for additional styling;
 
 const DiceRoller: React.FC = () => {
   const [stats, setStats] = useState<StatRollResult[]>([]);
@@ -23,44 +24,57 @@ const DiceRoller: React.FC = () => {
   };
 
   return (
-    <div className="dice-roller-container">
-      <h1>JT Rules D&D Stat Roller</h1>
-      <button className="roll-button" onClick={rollAllStats}>
+    <div className="container mt-4 text-white bg-dark">
+      <h1 className="text-center">JT Rules D&D Stat Roller</h1>
+      <button className="btn btn-primary mb-3" onClick={rollAllStats}>
         Roll All Stats
       </button>
 
-      <div className="stats-list">
+      <div className="row">
         {stats.length > 0 &&
           stats.map((stat, index) => (
-            <div key={index} className="stat-card">
-              <h3>Stat {index + 1}</h3>
-              <div className="roll-details">
-                <p>
-                  <strong>Initial Rolls:</strong> {stat.rolls.join(", ")}
-                </p>
-                <p>
-                  <strong>Rerolls:</strong>
-                </p>
-                <ul className="reroll-list">
-                  {stat.rerolls.map((reroll, i) =>
-                    reroll ? (
-                      <li key={i}>
-                        Dice {i + 1} rerolled: {reroll.join(", ")}
-                      </li>
-                    ) : (
-                      <li key={i}>Dice {i + 1}: No rerolls</li>
-                    )
-                  )}
-                </ul>
-                <p>
-                  <strong>Final Total:</strong> {stat.finalTotal}
-                </p>
-                <button
-                  className="roll-button-small"
-                  onClick={() => rollSingleStat(index)}
-                >
-                  Reroll Stat
-                </button>
+            <div key={index} className="col-md-4 mb-3">
+              <div className="card bg-secondary text-white">
+                <div className="card-body">
+                  <h3 className="card-title">Stat {index + 1}</h3>
+                  <div className="roll-details">
+                    <p>
+                      <strong>Initial Rolls:</strong> {stat.rolls.join(", ")}
+                    </p>
+                    <p>
+                      <strong>Rerolls:</strong>
+                    </p>
+                    <ul className="list-group list-group-flush">
+                      {stat.rerolls.map((reroll, i) =>
+                        reroll ? (
+                          <li
+                            key={i}
+                            className="list-group-item bg-dark text-white"
+                          >
+                            Dice {i + 1} was rerolled {reroll.length} time
+                            {reroll.length !== 1 ? "s" : ""}
+                          </li>
+                        ) : (
+                          <li
+                            key={i}
+                            className="list-group-item bg-dark text-white"
+                          >
+                            Dice {i + 1}: No rerolls
+                          </li>
+                        )
+                      )}
+                    </ul>
+                    <p>
+                      <strong>Final Total:</strong> {stat.finalTotal}
+                    </p>
+                    <button
+                      className="btn btn-light"
+                      onClick={() => rollSingleStat(index)}
+                    >
+                      Reroll Stat
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

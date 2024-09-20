@@ -1,100 +1,18 @@
-/* General container */
-.dice-roller-container {
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  background-color: #2C2F33;
-  color: #F2F2F2;
+body {
+  background-color: #121212;
+  color: #ffffff;
 }
 
-/* Roll All Stats button */
-.roll-button {
-  padding: 8px 16px;
-  background-color: #7289DA;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 15px;
-  transition: background-color 0.3s ease;
+.card {
+  border: 1px solid #444;
 }
 
-.roll-button:hover {
-  background-color: #5C6BC0;
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
 }
 
-/* Individual stat reroll button */
-.roll-button-small {
-  padding: 4px 8px;
-  background-color: #FFA500;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 12px;
-  cursor: pointer;
-  margin-top: 5px;
-}
-
-.roll-button-small:hover {
-  background-color: #FF8C00;
-}
-
-/* Stats container set to grid layout */
-.stats-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns */
-  gap: 10px; /* Spacing between cards */
-  justify-items: center; /* Center cards in each column */
-  max-width: 800px; /* Set a max-width to keep the grid compact */
-  width: 100%;
-}
-
-/* Stat card styling */
-.stat-card {
-  background-color: #40444B;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-  width: 200px; /* Keep width smaller to fit in the grid */
-  text-align: left;
-  color: #F2F2F2;
-}
-
-/* Reroll list */
-.reroll-list {
-  padding-left: 15px;
-  margin: 3px 0;
-}
-
-.reroll-list li {
-  list-style-type: disc;
-}
-
-.roll-details {
-  margin-top: 8px;
-}
-
-.roll-details p {
-  margin: 3px 0;
-}
-
-/* Headings */
-h1 {
-  font-size: 18px;
-  color: #FFF;
-  margin-bottom: 10px;
-}
-
-h3 {
-  font-size: 16px;
-  color: #FFF;
-  margin-bottom: 8px;
-}
-
-.stat-card p {
-  font-size: 12px;
-  color: #D1D1D1;
+.btn-light {
+  background-color: #f8f9fa;
+  color: #000;
 }
