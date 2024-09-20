@@ -7,8 +7,8 @@ export interface StatRollResult {
 }
 
 export const rollStat = (): StatRollResult => {
-  let rolls: number[] = [];
-  let rerolls: (number[] | null)[] = [];
+  const rolls: number[] = [];
+  const rerolls: (number[] | null)[] = [];
 
   // Roll 4d6 and reroll any 1s or 2s
   for (let i = 0; i < 4; i++) {

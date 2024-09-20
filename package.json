@@ -1,9 +1,7 @@
 {
   "name": "dnd-stats-roller",
-  "private": true,
   "version": "0.0.0",
-  "homepage": "https://jaas666.github.io/dnd-stats-roller"
-
+  "homepage": "https://jaas666.github.io/dnd-stats-roller",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,7 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "react": "^18.3.1",
