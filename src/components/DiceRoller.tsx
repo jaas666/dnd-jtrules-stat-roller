@@ -8,7 +8,7 @@ import "./DiceRoller.css"; // Custom CSS for additional styling;
 const DiceRoller: React.FC = () => {
   const [stats, setStats] = useState<StatRollResult[]>([]);
   const [race, setRace] = useState<any>(null); // Store selected race
-  const [subRace, setSubRace] = useState<any>(null); // Store selected sub-race
+  const [, setSubRace] = useState<any>(null); // Store selected sub-race
 
   // Roll all stats at once
   const rollAllStats = () => {
