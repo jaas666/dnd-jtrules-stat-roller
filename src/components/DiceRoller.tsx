@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { rollStat, StatRollResult } from "../utils/DiceRoller";
+import RaceSelector from "./RaceSelector";
+import SubRaceSelector from "./SubRaceSelector";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./DiceRoller.css"; // Custom CSS for additional styling;
 
 const DiceRoller: React.FC = () => {
   const [stats, setStats] = useState<StatRollResult[]>([]);
+  const [race, setRace] = useState<any>(null); // Store selected race
+  const [subRace, setSubRace] = useState<any>(null); // Store selected sub-race
 
   // Roll all stats at once
   const rollAllStats = () => {
@@ -23,9 +27,25 @@ const DiceRoller: React.FC = () => {
     setStats(updatedStats);
   };
 
+  // Example of how race bonuses could be applied (simplified logic)
+  const calculateBonus = (baseStat: number) => {
+    return baseStat;
+  };
+
+  console.log("Selected Race with Subraces:", race); // Log race data with subraces
+
   return (
     <div className="container mt-4 text-white bg-dark">
       <h1 className="text-center">JT Rules D&D Stat Roller</h1>
+
+      {/* Race Selector */}
+      <RaceSelector onSelect={setRace} />
+
+      {/* Only show SubRaceSelector if race has sub-races */}
+      {race && race.subraces && race.subraces.length > 0 && (
+        <SubRaceSelector race={race.index} onSelect={setSubRace} />
+      )}
+
       <button className="btn btn-primary mb-3" onClick={rollAllStats}>
         Roll All Stats
       </button>
@@ -52,7 +72,7 @@ const DiceRoller: React.FC = () => {
                             className="list-group-item bg-dark text-white"
                           >
                             Dice {i + 1} rerolled {reroll.length} time
-                            {reroll.length !== 1 ? "s" : ""}
+                            {reroll.length !== 1 ? "s" : ""}.
                           </li>
                         ) : (
                           <li
@@ -65,7 +85,8 @@ const DiceRoller: React.FC = () => {
                       )}
                     </ul>
                     <p>
-                      <strong>Final Total:</strong> {stat.finalTotal}
+                      <strong>Final Total:</strong>{" "}
+                      {calculateBonus(stat.finalTotal)} {/* Apply bonus */}
                     </p>
                     <button
                       className="btn btn-light"
