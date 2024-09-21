@@ -61,9 +61,6 @@ const RaceSelector: React.FC<RaceSelectorProps> = ({ onSelect }) => {
 
   return (
     <div className="mb-3">
-      <label htmlFor="race-select" className="form-label">
-        Select Race
-      </label>
       <select
         id="race-select"
         className="form-select"

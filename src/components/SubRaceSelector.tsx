@@ -72,9 +72,6 @@ const SubRaceSelector: React.FC<SubRaceSelectorProps> = ({
 
   return (
     <div className="mb-3">
-      <label htmlFor="subrace-select" className="form-label">
-        Select Sub-Race
-      </label>
       <select
         id="subrace-select"
         className="form-select"
