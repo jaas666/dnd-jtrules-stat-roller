@@ -3,12 +3,24 @@ import { rollStat, StatRollResult } from "../utils/DiceRoller";
 import RaceSelector from "./RaceSelector";
 import SubRaceSelector from "./SubRaceSelector";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./DiceRoller.css"; // Custom CSS for additional styling;
+import "./DiceRoller.css"; // Custom CSS for additional styling
+
+const ABILITIES = [
+  "Strength",
+  "Dexterity",
+  "Constitution",
+  "Intelligence",
+  "Wisdom",
+  "Charisma",
+];
 
 const DiceRoller: React.FC = () => {
   const [stats, setStats] = useState<StatRollResult[]>([]);
-  const [race, setRace] = useState<any>(null); // Store selected race
-  const [, setSubRace] = useState<any>(null); // Store selected sub-race
+  const [assignedStats, setAssignedStats] = useState<(string | null)[]>(
+    Array(6).fill(null)
+  );
+  const [race, setRace] = useState<any>(null);
+  const [subRace, setSubRace] = useState<any>(null);
 
   // Roll all stats at once
   const rollAllStats = () => {
@@ -17,6 +29,7 @@ const DiceRoller: React.FC = () => {
       newStats.push(rollStat());
     }
     setStats(newStats);
+    setAssignedStats(Array(6).fill(null)); // Reset assigned stats
   };
 
   // Roll a specific stat
@@ -27,12 +40,65 @@ const DiceRoller: React.FC = () => {
     setStats(updatedStats);
   };
 
-  // Example of how race bonuses could be applied (simplified logic)
-  const calculateBonus = (baseStat: number) => {
-    return baseStat;
+  // Calculate available abilities based on current assignments
+  const getAvailableAbilities = (currentIndex: number) => {
+    return ABILITIES.filter(
+      (ability) =>
+        !assignedStats.includes(ability) ||
+        assignedStats[currentIndex] === ability
+    );
   };
 
-  console.log("Selected Race with Subraces:", race); // Log race data with subraces
+  // Handle ability selection for each stat
+  const handleAbilitySelect = (index: number, selectedAbility: string) => {
+    const updatedAssignedStats = [...assignedStats];
+    updatedAssignedStats[index] = selectedAbility;
+    setAssignedStats(updatedAssignedStats);
+    console.log(assignedStats);
+
+    // Recalculate totals with bonuses
+    const updatedStatsWithBonuses = stats.map((stat, i) => ({
+      ...stat,
+      finalTotalWithBonus: calculateBonus(
+        updatedAssignedStats[i],
+        stat.finalTotal
+      ),
+    }));
+    setStats(updatedStatsWithBonuses);
+  };
+
+  // Calculate bonuses from race and subrace
+  const calculateBonus = (ability: string, baseStat: number) => {
+    let bonus = 0;
+
+    // Check for race bonuses
+    if (race && race.ability_bonuses) {
+      race.ability_bonuses.forEach((raceBonus: any) => {
+        if (
+          ability != null &&
+          raceBonus.ability_score.index ===
+            ability.substring(0, 3).toLowerCase()
+        ) {
+          bonus += raceBonus.bonus;
+        }
+      });
+    }
+
+    // Check for subrace bonuses
+    if (subRace && subRace.ability_bonuses) {
+      subRace.ability_bonuses.forEach((subraceBonus: any) => {
+        if (
+          ability != null &&
+          subraceBonus.ability_score.index ===
+            ability.substring(0, 3).toLowerCase()
+        ) {
+          bonus += subraceBonus.bonus;
+        }
+      });
+    }
+
+    return baseStat + bonus;
+  };
 
   return (
     <div className="container mt-4 text-white bg-dark">
@@ -85,11 +151,31 @@ const DiceRoller: React.FC = () => {
                       )}
                     </ul>
                     <p>
-                      <strong>Final Total:</strong>{" "}
-                      {calculateBonus(stat.finalTotal)} {/* Apply bonus */}
+                      <strong>Final Total:</strong> {stat.finalTotal} <br />
+                      <strong>With Bonuses:</strong>{" "}
+                      {assignedStats[index]
+                        ? calculateBonus(assignedStats[index], stat.finalTotal)
+                        : stat.finalTotal}
                     </p>
+
+                    {/* Ability Selector */}
+                    <select
+                      className="form-select mt-2"
+                      value={assignedStats[index] || ""}
+                      onChange={(e) =>
+                        handleAbilitySelect(index, e.target.value)
+                      }
+                    >
+                      <option value="">Assign Ability...</option>
+                      {getAvailableAbilities(index).map((ability) => (
+                        <option key={ability} value={ability}>
+                          {ability}
+                        </option>
+                      ))}
+                    </select>
+
                     <button
-                      className="btn btn-light"
+                      className="btn btn-light mt-3"
                       onClick={() => rollSingleStat(index)}
                     >
                       Reroll Stat
