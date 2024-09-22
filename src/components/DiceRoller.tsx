@@ -71,7 +71,7 @@ const DiceRoller: React.FC = () => {
                             key={i}
                             className="list-group-item bg-dark text-white"
                           >
-                            Dice {i + 1} rerolled {reroll.length} time
+                            Dice {i + 1}: Rerolled {reroll.length} time
                             {reroll.length !== 1 ? "s" : ""}.
                           </li>
                         ) : (
