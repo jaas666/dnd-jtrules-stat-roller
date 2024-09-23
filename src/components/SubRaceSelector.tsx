@@ -9,7 +9,7 @@ interface SubRace {
 
 interface SubRaceSelectorProps {
   race: string; // The selected race index
-  onSelect: (subRace: SubRace) => void;
+  onSelect: (subRace: SubRace | null) => void;
 }
 
 const SubRaceSelector: React.FC<SubRaceSelectorProps> = ({
@@ -52,9 +52,15 @@ const SubRaceSelector: React.FC<SubRaceSelectorProps> = ({
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = event.target.value;
     setSelectedSubRace(selected);
-    const subRace = subRaces.find((sr) => sr.index === selected);
-    if (subRace) {
-      onSelect(subRace);
+
+    if (selected === "") {
+      // If "Choose a sub-race..." is selected, pass null to reset sub-race
+      onSelect(null);
+    } else {
+      const subRace = subRaces.find((sr) => sr.index === selected);
+      if (subRace) {
+        onSelect(subRace);
+      }
     }
   };
 

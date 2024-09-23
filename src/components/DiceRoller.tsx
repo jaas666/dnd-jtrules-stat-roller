@@ -54,7 +54,6 @@ const DiceRoller: React.FC = () => {
     const updatedAssignedStats = [...assignedStats];
     updatedAssignedStats[index] = selectedAbility;
     setAssignedStats(updatedAssignedStats);
-    console.log(assignedStats);
 
     // Recalculate totals with bonuses
     const updatedStatsWithBonuses = stats.map((stat, i) => ({
@@ -68,7 +67,7 @@ const DiceRoller: React.FC = () => {
   };
 
   // Calculate bonuses from race and subrace
-  const calculateBonus = (ability: string, baseStat: number) => {
+  const calculateBonus = (ability: string | null, baseStat: number) => {
     let bonus = 0;
 
     // Check for race bonuses
@@ -100,16 +99,47 @@ const DiceRoller: React.FC = () => {
     return baseStat + bonus;
   };
 
+  // Handle race selection, allowing deselection (reset to no race)
+  const handleRaceSelect = (selectedRace: any) => {
+    console.log(selectedRace);
+    if (selectedRace === "") {
+      setRace(null); // Deselect race
+      setSubRace(null); // Reset subrace
+    } else {
+      setRace(selectedRace);
+      setSubRace(null); // Reset subrace when new race is selected
+    }
+
+    // Recalculate stats based on race change
+    const updatedStatsWithRaceBonus = stats.map((stat, i) => ({
+      ...stat,
+      finalTotalWithBonus: calculateBonus(assignedStats[i], stat.finalTotal),
+    }));
+    setStats(updatedStatsWithRaceBonus);
+  };
+
+  // Handle subrace selection, allowing deselection (reset to no subrace)
+  const handleSubRaceSelect = (selectedSubRace: any) => {
+    setSubRace(selectedSubRace === "" ? null : selectedSubRace);
+
+    // Recalculate stats based on subrace change
+    const updatedStatsWithSubRaceBonus = stats.map((stat, i) => ({
+      ...stat,
+      finalTotalWithBonus: calculateBonus(assignedStats[i], stat.finalTotal),
+    }));
+    setStats(updatedStatsWithSubRaceBonus);
+  };
+
   return (
     <div className="container mt-4 text-white bg-dark">
       <h1 className="text-center">JT Rules D&D Stat Roller</h1>
 
       {/* Race Selector */}
-      <RaceSelector onSelect={setRace} />
+      <RaceSelector onSelect={handleRaceSelect} />
 
       {/* Only show SubRaceSelector if race has sub-races */}
       {race && race.subraces && race.subraces.length > 0 && (
-        <SubRaceSelector race={race.index} onSelect={setSubRace} />
+        <SubRaceSelector race={race.index} onSelect={handleSubRaceSelect} />
       )}
 
       <button className="btn btn-primary mb-3" onClick={rollAllStats}>
