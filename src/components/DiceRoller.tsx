@@ -130,6 +130,12 @@ const DiceRoller: React.FC = () => {
     setStats(updatedStatsWithSubRaceBonus);
   };
 
+  // Calculate final modifier for a given total
+  const calculateModifier = (total: number) => {
+    const modifier = Math.floor((total - 10) / 2);
+    return modifier >= 0 ? `+${modifier}` : modifier;
+  };
+
   return (
     <div className="container mt-4 text-white bg-dark">
       <h1 className="text-center">JT Rules D&D Stat Roller</h1>
@@ -186,6 +192,16 @@ const DiceRoller: React.FC = () => {
                       {assignedStats[index]
                         ? calculateBonus(assignedStats[index], stat.finalTotal)
                         : stat.finalTotal}
+                      <br />
+                      <strong>Modifier:</strong>{" "}
+                      {assignedStats[index]
+                        ? calculateModifier(
+                            calculateBonus(
+                              assignedStats[index],
+                              stat.finalTotal
+                            )
+                          )
+                        : calculateModifier(stat.finalTotal)}
                     </p>
 
                     {/* Ability Selector */}
