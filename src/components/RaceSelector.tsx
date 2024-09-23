@@ -9,7 +9,7 @@ interface Race {
 }
 
 interface RaceSelectorProps {
-  onSelect: (race: Race) => void;
+  onSelect: (race: Race | null) => void; // Allow onSelect to accept null for resetting
 }
 
 const RaceSelector: React.FC<RaceSelectorProps> = ({ onSelect }) => {
@@ -46,9 +46,15 @@ const RaceSelector: React.FC<RaceSelectorProps> = ({ onSelect }) => {
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = event.target.value;
     setSelectedRace(selected);
-    const race = races.find((r) => r.index === selected);
-    if (race) {
-      onSelect(race);
+
+    if (selected === "") {
+      // If "Choose a race..." is selected, pass null to reset race
+      onSelect(null);
+    } else {
+      const race = races.find((r) => r.index === selected);
+      if (race) {
+        onSelect(race);
+      }
     }
   };
 
